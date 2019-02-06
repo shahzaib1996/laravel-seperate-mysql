@@ -1,5 +1,5 @@
 <div class="table-responsive" id="tabledata"> 
-	<table id="example" class="table table-hover table-striped table-bordered">
+	<table id="example" class="table table-hover table-bordered" style="background: #fff;">
 
 		<thead>
 			<tr>

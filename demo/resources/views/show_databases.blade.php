@@ -11,6 +11,9 @@
 
           <form action="tables" method="POST" onsubmit="return checkMat('database')">
             @csrf
+
+            <div class="alert alert-danger" id="alertbox" style="display: none;" > <center> Please Select Database ! </center> </div>
+
             <div class="form-group">
               <label class="name"> Databases </label>
               <select class="form-control" name="database" id="database">
@@ -35,7 +38,8 @@
     var m = document.getElementById(selectID);
 
     if(m.value == "none") {
-      alert("Please select Database!");
+      var alertbox = document.getElementById('alertbox');
+      alertbox.style.display = "block";
       return false;
     } else {
       return true;

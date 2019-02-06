@@ -14,6 +14,8 @@
 
           <form action="showtabledata" method="" id="form">
 
+            <div class="alert alert-danger" id="alertbox" style="display: none;" > <center> Please Select Table ! </center> </div>
+
             <div class="form-group" >
               <label> Tables </label>
               <!-- <input type="text" id="search" name="search" class="form-control" onkeyup="filter()"> -->
@@ -46,7 +48,8 @@
       e.preventDefault();
       var q = jQuery("#table").val();
       if(q == "none") {
-        alert("Please select Table!");
+        var alertbox = document.getElementById('alertbox');
+        alertbox.style.display = "block";
       } else {
         window.location.href = jQuery(this).prop('action')+"/" + encodeURIComponent(q)        
         
@@ -54,16 +57,6 @@
     });
   });
 
-  function checkMat(selectID) {
-    var m = document.getElementById(selectID);
-
-    if(m.value == "none") {
-      alert("Please select Table!");
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   function filter() {
     var keyword = document.getElementById("search").value;

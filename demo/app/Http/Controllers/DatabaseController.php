@@ -7,30 +7,32 @@ use App\Dynamic;
 use Config;
 use DB;
 use App\Http\Requests;
+use App\MyConfig;
 
 
 class DatabaseController extends Controller
 {
-
-	private $items_per_page = 10;
+	
+	protected $items_per_page = 10;
 
 	public function __construct()
 	{
 		$this->middleware(['auth','check_connection']);
+		$this->setDBC();
 	}
 
-	public function setIPP() {
-
+	public function setDBC() {	
+		$a = MyConfig::find(1)->value;
+		$this->items_per_page = $a;
 	}
 
-	public function getIPP() {
-		
+	public function setIPP($ipp) {
+		$cval = MyConfig::find(1);
+		$cval->value = $ipp;
+		$cval->save();
+		return $ipp;
 	}
 
-
-	public function index() {
-
-	}
 
 	public function listDatabase() {
 		$data = DB::select('SHOW DATABASES');
@@ -61,46 +63,17 @@ class DatabaseController extends Controller
 		return view('show_tables', [ 'tables' => $tables ] );
 	}
 
-	public function showTableData(Request $request) {
-		// $data = DB::table($request->table)->get();
-		// return view('show_table_data', [ 'data' => $data ] );
-
-		// Testing Eloquent
-		$model = new Dynamic([]);
-		$model->setTable($request->table);
-		
-		$table_col = [];
-		if($model->count() != 0){
-			$table_col = array_keys($model->first()->toArray());
-		}
-		$table_data = $model->paginate(10)->appends([ 'table' => $request->table ]);
-		
-		return view('show_table_data', [ 'table_data' => $table_data, 'table_col' => $table_col ] );
-
-
-	}
 
 	public function showAjaxData($table) {
-		// $data = DB::table($request->table)->get();
-		// return view('show_table_data', [ 'data' => $data ] );
 
 		if($table == '') {
 			return "<h4> <center> Table Not found </center> </h4>";
 		}
+
+		$item_per_page =  MyConfig::find(1)->value;
 		
-		// // Testing Eloquent
 		$model = new Dynamic([]);
 		$model->setTable($table);
-		
-		// $table_col = [];
-		// if($model->count() != 0){
-		// 	$table_col = array_keys($model->first()->toArray());
-		// }
-		// $table_data = $model->paginate(10)->appends([ 'table' => $request->table ]);
-		
-		// return view('show_ajax_data', [ 'table_data' => $table_data, 'table_col' => $table_col ] );
-
-		// ===========
 
 		$table_col = [];
 		if($model->count() != 0){
@@ -108,14 +81,10 @@ class DatabaseController extends Controller
 		}
 		$table_data = $model->paginate($this->items_per_page)->appends([ 'table' => $table ]);
 
-		return view('show_table_data', ['table_data' => $table_data, 'table_col' => $table_col, 'table_name' => $table ]);
-
-		// ===========
-
+		return view('show_table_data', ['table_data' => $table_data, 'table_col' => $table_col, 'table_name' => $table, 'item_per_page' => $item_per_page ]);
 
 	}
 
-	
 
 	public function fetch_data(Request $request) {
 		if($request->ajax()) {
@@ -128,7 +97,7 @@ class DatabaseController extends Controller
 			
 			$table_data =  $model->paginate($this->items_per_page)->appends([ 'table' => $request->table ]);
 			return view('show', ['table_data' => $table_data, 'table_col' => $table_col ])->render();
-			
+
 		}
 	}
 

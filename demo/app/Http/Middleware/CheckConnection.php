@@ -31,7 +31,7 @@ class CheckConnection
         return $next($request);
 
         } else {
-            return redirect('add-credentials');
+            return redirect('addcredentials');
         }
     }
 }

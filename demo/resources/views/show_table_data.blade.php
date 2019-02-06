@@ -24,19 +24,84 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
 
+  <style type="text/css">
 
+
+
+  .navbar {
+    background: #fff;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+
+
+  ul.myul {
+    list-style-type: none;
+    padding-left: 0px;
+    margin-top: 5px;
+
+  }
+
+  ul.myul li a{
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: rgba(0,0,0,.5);
+
+  }
+  ul.myul li a:hover {
+    background: #f6f7f7 !important;
+    border-radius: 10px 10px 10px 10px;
+    color:grey !important;
+
+  }
+
+</style>
 
 
 
 </head>
-<body style="background: white;">
+<body style="background: #f4f4f4;" onload="preSelect()">
   <div id="app">
+
+    <nav class="navbar navbar-default">
+      <div class="container" style="padding-left: 40px !important;">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/home">
+            {{ config('app.name', 'Laravel') }}
+          </a>
+
+          <ul class="navbar-nav mr-auto myul">
+            <li class="nav-item leftnav" style="font-size:16px;">
+              <a class="nav-link" href="../addcredentials">Connection</a>
+            </li>
+
+            <li class="nav-item leftnav" style="font-size:16px;margin-left: 10px;">
+              <a class="nav-link" href="../databases">Databases</a>
+            </li>
+          </ul>
+          
+
+        </div>
+      </div>
+    </nav>
 
     <main class="py-4" style="margin-top: 50px;padding-left: 50px;padding-right: 50px;">
 
       <div class="container-fluid">
 
 
+        <form action="" name="ipp_form" id="ipp_form" >
+
+          <label>Items per page </label>
+          <select id="ipp" name="ipp" >
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+          </select>
+
+        </form>
 
 
 
@@ -47,15 +112,7 @@
         @else
         
 
-            @include('show')
-
-
-
-         
-
-
-
-
+        @include('show')
 
 
         @endif
@@ -132,7 +189,26 @@
 
     });
 
+    function preSelect()
+    {    
+      var element = document.getElementById('ipp');
+      element.value = '{{$item_per_page}}';
 
+    }
+
+    $(document).ready(function() {
+      $("#ipp").on('change', function() {
+
+        var u = "{{url('/')}}/changeipp/"+this.value;
+        $.ajax({
+          url: u,
+          success: function(data) {
+            location.reload();
+          }
+        });
+
+      });
+    });
 
 
 
