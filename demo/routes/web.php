@@ -35,6 +35,12 @@ Route::get('changeipp/{ipp}', 'DatabaseController@setIPP');
 Route::get('testipp', 'DatabaseController@testipp');
 
 
+Route::get('sendlaratables/{table}', 'TestLaratablesController@sendData')->name('sendlaratables');
+Route::get('testlaratables', 'TestLaratablesController@index');
+
+
+Route::get('testsp/{tab}', 'TestLaratablesController@testsp');
+
 // Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');

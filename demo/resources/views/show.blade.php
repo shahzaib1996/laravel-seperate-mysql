@@ -46,9 +46,9 @@
 
 	</table>
 
-	{{ $table_data->links() }}
 
 </div>
+	{{ $table_data->links() }}
 
 
 
