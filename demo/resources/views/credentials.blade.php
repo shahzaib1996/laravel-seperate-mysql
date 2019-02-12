@@ -11,6 +11,14 @@
 
 					<form action="connect-new" method="POST">
 
+						@if (session()->has('message'))
+						<div class="alert alert-danger">
+							<center>
+								{!! session()->get('message') !!}
+							</center>
+						</div>
+						@endif
+
 						@csrf
 						<div class="form-group">
 							<label class="name"> Host </label>

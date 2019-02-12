@@ -34,12 +34,14 @@ Route::post('connect-new', 'MyDBController@index');
 Route::get('changeipp/{ipp}', 'DatabaseController@setIPP');
 Route::get('testipp', 'DatabaseController@testipp');
 
+//Testing Laratables Package
+Route::get('sendlaratables/{table}', 'TestLaratablesController@sendData')->name('sendlaratables'); //ajax request
+Route::get('testlaratables', 'TestLaratablesController@index'); //
 
-Route::get('sendlaratables/{table}', 'TestLaratablesController@sendData')->name('sendlaratables');
-Route::get('testlaratables', 'TestLaratablesController@index');
-
-
-Route::get('testsp/{tab}', 'TestLaratablesController@testsp');
+//Procedures 
+Route::get('procedures', 'ProcedureController@procedures');
+Route::post('getpara', 'ProcedureController@getPara');
+Route::post('runsp', 'ProcedureController@runSP');
 
 // Auth::routes();
 

@@ -53,6 +53,11 @@
                             <a class="nav-link" href="databases">Databases</a>
                         </li>
 
+
+                        <li class="nav-item leftnav" style="font-size:16px;margin-left: 10px;">
+                            <a class="nav-link" href="procedures">Procedures</a>
+                        </li>
+
                         
 
                     </ul>

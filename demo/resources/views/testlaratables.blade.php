@@ -36,7 +36,7 @@
       <div class="container-fluid">
 
 
-    
+
 
         <div class="table-responsive" id="tabledata"> 
           <table id="example" class="table table-hover table-bordered" style="background: #fff;">
@@ -86,39 +86,77 @@
   <script type="text/javascript">
 
     $(document).ready(function() {
-    // Setup - add a text input to each footer cell
-    $('#example tfoot th').each( function () {
-      var title = $(this).text();
-      $(this).html( '<input type="text" placeholder="Search Here" />' );
-    } );
+  // Setup - add a text input to each footer cell
+  $('#example tfoot th').each(function() {
+    var title = $(this).text();
+    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+  });
 
-    // DataTable
-    var table = $('#example').DataTable(
-    {
-      processing: true,
-      serverSide: true,
-      ajax: "{{ route('sendlaratables', ['table' => $table_name ]) }}",
-      columns: [
-      { name: 'review' },
-      { name: 'product_id' },
-      { name: 'star' }
-      ]
+  var table = $('#example').dataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": "{{ route('sendlaratables', ['table' => $table_name ]) }}",
+    columns: [
+    { name: 'id' },
+    { name: 'review' },
+    { name: 'star' }
+    ],
+    initComplete: function() {
+      var api = this.api();
+
+      // Apply the search
+      api.columns().every(function() {
+        var that = this;
+
+        $('input', this.footer()).on('keyup change', function() {
+          if (that.search() !== this.value) {
+            that
+            .search(this.value)
+            .draw();
+          }
+        });
+      });
     }
-    );
+  });
+});
 
-    // Apply the search
-    table.columns().every( function () {
-      var that = this;
+  //   $(document).ready(function() {
+  //   // Setup - add a text input to each footer cell
+  //   $('#example tfoot th').each( function () {
+  //     var title = $(this).text();
+  //     $(this).html( '<input type="text" placeholder="Search Here" />' );
+  //   } );
 
-      $( 'tfoot input', this.footer() ).on( 'keyup change', function () {
-        if ( that.search() !== this.value ) {
-          that
-          .search( this.value )
-          .draw();
-        }
-      } );
-    } );
-  } );
+  //   // DataTable
+  //   var table = $('#example').DataTable(
+  //   {
+  //     processing: true,
+  //     serverSide: true,
+  //     ajax: "{{ route('sendlaratables', ['table' => $table_name ]) }}",
+  //     columns: [
+  //     { name: 'review' },
+  //     { name: 'product_id' },
+  //     { name: 'star' }
+  //     ]
+  //   }
+  //   );
+
+  //   // Apply the search
+  //   table.columns().every( function () {
+  //     var that = this;
+
+  //     $( 'tfoot input', this.footer() ).on( 'keyup change', function () {
+  //       if ( that.search() !== this.value ) {
+  //         that
+  //         .search( this.value )
+  //         .draw();
+  //       }
+  //     } );
+  //   } );
+  // } );
+
+
+
 
     // $('#example').DataTable({
     //   processing: true,
