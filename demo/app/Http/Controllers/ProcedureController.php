@@ -18,21 +18,9 @@ class ProcedureController extends Controller
 
 	}
 	public function procedures() {
-		// return DB::select("call selecttable('".$tab."')");
 		$pro = DB::select("select * from information_schema.routines where routine_type = 'PROCEDURE' AND routine_schema = '".session('database')."' ");
-		// return $pro;
-		// return DB::select("SELECT * FROM information_schema.parameters WHERE SPECIFIC_NAME = 'xyz'");
-		return view('test', [ 'pro' => $pro ] );
-		// $pp = "";
-		// $arr = [ 'reviews', '2', '4' ];
-		// for($i=0;$i<count($arr);$i++) {
-		// 	$pp .= "'";
-		// 	$pp .= $arr[$i];
-		// 	$pp .= "',";
 
-		// }
-		// return $pp;
-		// return DB::select("call xyz(?,?,?)",array('reviews',1,3));
+		return view('test', [ 'pro' => $pro ] );
 		
 	}
 
