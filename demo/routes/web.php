@@ -28,6 +28,14 @@ Route::post('tables', 'DatabaseController@listTables');
 
 Route::get('showtabledata/{table}', 'DatabaseController@showAjaxData');
 Route::get('ajaxtabledata/fetch_data', 'DatabaseController@fetch_data');
+Route::get('ajaxtabledata/search_data', 'DatabaseController@search_data');
+Route::get('/serverSide/{table?}', [
+    'as'   => 'serverSide',
+    'uses' => 'DatabaseController@fetch_data'
+]);
+
+// Route::post('showtabledatax/{table}/', 'DatabaseController@showSelectedCol');
+
 
 Route::post('connect-new', 'MyDBController@index');
 
@@ -37,6 +45,13 @@ Route::get('testipp', 'DatabaseController@testipp');
 //Testing Laratables Package
 Route::get('sendlaratables/{table}', 'TestLaratablesController@sendData')->name('sendlaratables'); //ajax request
 Route::get('testlaratables', 'TestLaratablesController@index'); //
+
+//yajra testing
+Route::get('/testyajra','TestLaratablesController@sendview');
+// Route::get('/serverSide', [
+//     'as'   => 'serverSide',
+//     'uses' => 'TestLaratablesController@sendyd'
+// ]);
 
 //Procedures 
 Route::get('procedures', 'ProcedureController@procedures');

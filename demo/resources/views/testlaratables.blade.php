@@ -92,7 +92,7 @@
     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
   });
 
-  var table = $('#example').dataTable({
+  var table = $('#example').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": "{{ route('sendlaratables', ['table' => $table_name ]) }}",

@@ -57,12 +57,38 @@
 
   }
 
+  .check_box {
+    display: inline-block;
+    text-align: justify;
+    border: 1px solid #dedede;padding: 10px;margin-right: 10px;
+    color: grey;
+  }
+  .check_box:hover {
+    opacity: 1;
+  }
+
+
+  .colcheck {
+    transform: scale(1.5);
+    opacity: 0.6;
+  }
+
+  .colcheck:checked {
+    opacity: 1 !important;
+  }
+
+  .btn-success{
+    border-radius: 0px 0px 0px 0px !important;
+  }
+
+
+
 </style>
 
 
 
 </head>
-<body style="background: #f4f4f4;" onload="preSelect()">
+<body style="background: #f4f4f4;">
   <div id="app">
 
     <nav class="navbar navbar-default">
@@ -91,28 +117,84 @@
 
       <div class="container-fluid">
 
-
-        <form action="" name="ipp_form" id="ipp_form" >
-
-          <label>Items per page </label>
-          <select id="ipp" name="ipp" >
-            <option>10</option>
-            <option>20</option>
-            <option>30</option>
-          </select>
-
-        </form>
-
-
-
-        @if(count($table_data) == 0 )
+        @if(count($table_col) == 0 )
 
         <h4> <center> Table is empty </center> </h4>
 
         @else
-        
 
-        @include('show')
+
+        <form action="" method="" >
+
+          @foreach($table_col_select as $field )
+
+          <div class="check_box">
+            <input type="checkbox" class="colcheck" name="cols[]" value="{{$field}}" 
+            @if(in_array($field, $table_col)) 
+            checked 
+            @endif
+            >
+            <span style="text-transform: capitalize;margin-left: 5px;"> {{$field}} </span>
+          </div>
+
+          @endforeach
+
+
+
+          <input type="submit" name="filter" class="btn btn-success" value="Filter" style="padding: 10px;border: 2px solid #5cb85c;margin-top: -4px;">
+
+          <br>
+
+          <input type="button" name="filter" class="btn btn-info" value="Export Current Data as Excel" onclick="exportToExcel()" style="padding: 10px;border: 2px solid #5bc0de;margin-top: 20px;">
+
+        </form>
+
+        <br>
+
+
+
+
+
+        <div class="table-responsive" id="tabledata"> 
+          <table id="example" class="datatable table table-hover table-bordered" style="background: #fff;">
+
+            <thead>
+              <tr>
+
+                @for ($i = 0; $i < count($table_col); $i++)
+                <th>
+                  {{$table_col[$i]}}
+                </th>
+                @endfor
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+
+            </tbody>
+
+            <tfoot>
+              <tr>
+
+                @for ($i = 0; $i < count($table_col); $i++)
+                <th>
+                  {{$table_col[$i]}}
+                </th>
+                @endfor
+
+              </tr>
+
+            </tfoot>
+
+
+
+          </table>
+
+
+        </div>
 
 
         @endif
@@ -138,77 +220,97 @@
   <script type="text/javascript">
 
     $(document).ready(function() {
-    // Setup - add a text input to each footer cell
-    $('#example tfoot th').each( function () {
-      var title = $(this).text();
-      $(this).html( '<input type="text" placeholder="Search Here" />' );
-    } );
 
-    // DataTable
-    var table = $('#example').DataTable(
-    {
-      "paging":   false,
-      "searching": true
-    }
-    );
+  //   // Setup - add a text input to each footer cell
+  $('#example tfoot th').each( function () {
+    var title = $(this).text();
+    $(this).html( '<input type="text" placeholder="Search Here" />' );
+  } );
 
-    // Apply the search
-    table.columns().every( function () {
-      var that = this;
+  //   // DataTable
+  var table = $('.datatable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('serverSide' , [ 'table' => $table_name ] ) }}"
 
-      $( 'input', this.footer() ).on( 'keyup change', function () {
-        if ( that.search() !== this.value ) {
-          that
-          .search( this.value )
-          .draw();
-        }
-      } );
+  });
+
+  //   // Apply the search
+  table.columns().every( function () {
+    var that = this;
+
+    $( 'input', this.footer() ).on( 'keyup change', function () {
+      if ( that.search() !== this.value ) {
+        that
+        .search( this.value )
+        .draw();
+      }
     } );
   } );
 
+});
 
-    $(document).ready(function(){ 
 
-      $(document).on('click','.pagination a', function(event){
-        event.preventDefault();
 
-        $(this).css('background', '#508ec4');
-
-        var page =  $(this).attr('href').split('page=')[1];
-        fetch_data(page);
-      });
-
-      function fetch_data(page) {
-        $.ajax({
-          url:"{{url('/')}}/ajaxtabledata/fetch_data?table={{$table_name}}&page="+page,
-          success:function(data) {
-            $('#tabledata').html(data);
-          }
-        })
+    function exportToExcel() {
+      var htmls = "";
+      var uri = 'data:application/vnd.ms-excel;base64,';
+      var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'; 
+      var base64 = function(s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+      };
+      var format = function(s, c) {
+        return s.replace(/{(\w+)}/g, function(m, p) {
+         return c[p];
+       })
+      };
+      htmls = $('.datatable').html()
+      var ctx = {
+        worksheet : 'Worksheet',
+        table : htmls
       }
-
-    });
-
-    function preSelect()
-    {    
-      var element = document.getElementById('ipp');
-      element.value = '{{$item_per_page}}';
-
+      var link = document.createElement("a");
+      link.download = "datatable_export.xls";
+      link.href = uri + base64(format(template, ctx));
+      link.click();
     }
 
-    $(document).ready(function() {
-      $("#ipp").on('change', function() {
 
-        var u = "{{url('/')}}/changeipp/"+this.value;
-        $.ajax({
-          url: u,
-          success: function(data) {
-            location.reload();
-          }
-        });
 
-      });
-    });
+
+
+    // $(document).ready(function() {
+    //   $('.datatable').DataTable({
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: "{{ route('serverSide' , [ 'table' => $table_name ] ) }}"
+
+    //   });
+    // });
+
+
+
+
+    // $(document).ready(function(){ 
+
+    //   $(document).on('click','.pagination a', function(event){
+    //     event.preventDefault();
+
+
+    //     var page =  $(this).attr('href').split('page=')[1];
+    //     fetch_data(page);
+    //   });
+
+    //   function fetch_data(page) {
+    //     $.ajax({
+    //       url:"{{url('/')}}/ajaxtabledata/fetch_data?table={{$table_name}}&page="+page,
+    //       success:function(data) {
+    //         $('#tabledata').html(data);
+    //       }
+    //     })
+    //   }
+
+    // });
 
 
 

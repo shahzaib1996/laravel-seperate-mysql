@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dynamic extends Model
 {
-	 protected $connection = 'mysql';
-     protected $table = 'reviews';
+	 protected $connection = 'tenant';
+     protected $table = '';
      /**
      * @param $table
      */
