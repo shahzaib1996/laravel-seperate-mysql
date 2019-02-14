@@ -42,16 +42,6 @@ Route::post('connect-new', 'MyDBController@index');
 Route::get('changeipp/{ipp}', 'DatabaseController@setIPP');
 Route::get('testipp', 'DatabaseController@testipp');
 
-//Testing Laratables Package
-Route::get('sendlaratables/{table}', 'TestLaratablesController@sendData')->name('sendlaratables'); //ajax request
-Route::get('testlaratables', 'TestLaratablesController@index'); //
-
-//yajra testing
-Route::get('/testyajra','TestLaratablesController@sendview');
-// Route::get('/serverSide', [
-//     'as'   => 'serverSide',
-//     'uses' => 'TestLaratablesController@sendyd'
-// ]);
 
 //Procedures 
 Route::get('procedures', 'ProcedureController@procedures');

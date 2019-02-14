@@ -13,24 +13,10 @@ use Yajra\Datatables\Datatables;
 class DatabaseController extends Controller
 {
 	
-	protected $items_per_page = 10;
 
 	public function __construct()
 	{
 		$this->middleware(['auth','check_connection']);
-		$this->setDBC();
-	}
-
-	public function setDBC() {	
-		$a = MyConfig::find(1)->value;
-		$this->items_per_page = $a;
-	}
-
-	public function setIPP($ipp) {
-		$cval = MyConfig::find(1);
-		$cval->value = $ipp;
-		$cval->save();
-		return $ipp;
 	}
 
 
@@ -75,8 +61,7 @@ class DatabaseController extends Controller
 		if($request->cols) {
 			session(['cols' => $request->cols]);
 		}
-
-		// session(['cols' => ['id','name'] ]);
+		
 
 		if($table == '') {
 			return "<h4> <center> Table Not found </center> </h4>";
@@ -99,7 +84,6 @@ class DatabaseController extends Controller
 
 		}
 
-		// return $table_data;
 
 		return view('show_table_data', [ 
 			'table_col' => $table_col, 

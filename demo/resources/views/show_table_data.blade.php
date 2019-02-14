@@ -62,6 +62,7 @@
     text-align: justify;
     border: 1px solid #dedede;padding: 10px;margin-right: 10px;
     color: grey;
+    margin-top: 10px;
   }
   .check_box:hover {
     opacity: 1;
@@ -239,13 +240,24 @@
   table.columns().every( function () {
     var that = this;
 
-    $( 'input', this.footer() ).on( 'keyup change', function () {
-      if ( that.search() !== this.value ) {
-        that
-        .search( this.value )
-        .draw();
+    // $( 'input', this.footer() ).on( 'keyup change', function () { //onevent open
+
+      $('input', this.footer()).keypress(function (e) {
+       var key = e.which;
+       if(key == 13)  
+       {
+
+        if ( that.search() !== this.value ) {
+          that
+          .search( this.value )
+          .draw();
+        }
       }
-    } );
+    });
+
+    // } ); //on event close
+
+
   } );
 
 });
