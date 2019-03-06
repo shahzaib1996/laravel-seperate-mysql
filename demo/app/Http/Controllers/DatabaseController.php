@@ -19,6 +19,11 @@ class DatabaseController extends Controller
 		$this->middleware(['auth','check_connection']);
 	}
 
+	/**
+     * Return list of databases on mysql server.
+     *
+     * @return view
+     */
 
 	public function listDatabase() {
 		$data = DB::select('SHOW DATABASES');

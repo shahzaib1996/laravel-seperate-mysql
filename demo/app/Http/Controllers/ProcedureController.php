@@ -14,7 +14,7 @@ class ProcedureController extends Controller
 		$this->middleware(['auth','check_database']);
 		
 	}
-	public function inex() {
+	public function index() {
 
 	}
 	public function procedures() {

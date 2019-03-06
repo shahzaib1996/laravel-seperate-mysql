@@ -181,11 +181,53 @@
 
   <script type="text/javascript">
 
-  $(document).ready(function() {
-    $('#example').DataTable();
+    $(document).ready(function() {
+
+  //   // Setup - add a text input to each footer cell
+  $('#example tfoot th').each( function () {
+    var title = $(this).text();
+    $(this).html( '<input type="text" placeholder="Search Here" />' );
   } );
 
-</script>
+  //   // DataTable
+  var table = $('#example').DataTable({
+    
+  });
+
+  //   // Apply the search
+  table.columns().every( function () {
+    var that = this;
+
+    // $( 'input', this.footer() ).on( 'keyup change', function () { //onevent open
+
+      $('input', this.footer()).keypress(function (e) {
+       var key = e.which;
+       if(key == 13)  
+       {
+
+        if ( that.search() !== this.value ) {
+          that
+          .search( this.value )
+          .draw();
+        }
+      }
+    });
+
+    // } ); //on event close
+
+
+  } );
+
+});
+
+
+    // $(document).ready(function() {
+    //   $('#example').DataTable();
+    // } );
+
+
+
+  </script>
 
 </body>
 </html>

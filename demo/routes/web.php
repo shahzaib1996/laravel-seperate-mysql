@@ -14,6 +14,10 @@
 Route::get('/', function () {
 	return view('welcome');
 });
+Route::get('/test', function() {
+	return "Working";
+});
+Route::get('/unit/{name}', 'TestingController@showName');
 
 Auth::routes();
 
